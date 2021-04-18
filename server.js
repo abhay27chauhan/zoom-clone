@@ -15,9 +15,13 @@ app.get("/:room", (req, res) => {
     res.render('room', {roomId: req.params.room})
 })
 
+// this runs any time someone connects to our webpage
 io.on('connection', socket => {
+    // this runs when someone connects to a room
     socket.on('join-room', (roomId, userId) => {
+        // allowing current socket to join the room
         socket.join(roomId)
+        // sending message to the other users in the room, current user is connected to
         socket.to(roomId).broadcast.emit('user-connected', userId)
 
         socket.on('disconnect', () => {
